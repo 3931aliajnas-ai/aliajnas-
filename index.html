@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RV BAZAR ✦ Dark + rv bazar Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Nunito:wght@400;600;700;800;900&family=Amazon+Ember:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   THEME VARIABLES
+===================================================== */
+:root {
+  /* Rasakaram (dark) */
+  --rk-bg:#0D0A1A; --rk-ink:#1A1530; --rk-card:#13102A;
+  --rk-border:rgba(255,255,255,0.07); --rk-muted:rgba(255,255,255,0.45);
+  --rk-text:#fff; --rk-saffron:#FF6B00; --rk-turmeric:#FFC200;
+  --rk-rose:#E8194E; --rk-mint:#00C48C;
+
+  /* Amazon (light) */
+  --az-bg:#EAEDED; --az-white:#fff; --az-navy:#131921;
+  --az-nav2:#232F3E; --az-orange:#FF9900; --az-orange2:#E47911;
+  --az-blue:#007185; --az-green:#007600; --az-red:#B12704;
+  --az-text:#0F1111; --az-muted:#565959; --az-border:#D5D9D9;
+  --az-card:#fff; --az-sidebar:#F0F2F2;
+}
+
+/* =====================================================
+   RESET & BASE
+===================================================== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+a{color:inherit;text-decoration:none}img{display:block}button,input,select{font-family:inherit}
+
+/* =====================================================
+   MODE BODY CLASSES
+===================================================== */
+body.mode-rk{background:var(--rk-bg);color:var(--rk-text);cursor:none}
+body.mode-az{background:var(--az-bg);color:var(--az-text);cursor:auto}
+
+/* =====================================================
+   CUSTOM CURSOR (Rasakaram only)
+===================================================== */
+#cursor{position:fixed;z-index:9999;pointer-events:none;width:18px;height:18px;
+  border-radius:50%;background:var(--rk-saffron);mix-blend-mode:difference;
+  transform:translate(-50%,-50%);transition:width .18s,height .18s;display:none}
+body.mode-rk #cursor{display:block}
+body.mode-rk #cursor.big{width:38px;height:38px}
+
+/* =====================================================
+   NOISE / GLOW (Rasakaram only)
+===================================================== */
+#rk-bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;display:none;
+  background:
+    radial-gradient(ellipse 80vw 60vh at 10% 10%,rgba(255,107,0,.12),transparent 55%),
+    radial-gradient(ellipse 70vw 60vh at 90% 90%,rgba(232,25,78,.10),transparent 55%);}
+body.mode-rk #rk-bg-layer{display:block}
+
+/* =====================================================
+   MODE TOGGLE BUTTON
+===================================================== */
+.mode-toggle{
+  display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:none;
+  font-size:13px;font-weight:800;cursor:pointer;transition:all .22s;white-space:nowrap;
+  position:relative;overflow:hidden;
+}
+body.mode-rk .mode-toggle{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.1);color:#fff}
+body.mode-rk .mode-toggle:hover{background:rgba(255,107,0,.15);border-color:var(--rk-saffron)}
+body.mode-az .mode-toggle{background:var(--az-orange);border:1.5px solid var(--az-orange2);color:#111;font-weight:900}
+body.mode-az .mode-toggle:hover{background:var(--az-orange2)}
+
+/* =====================================================
+   ██████  RASAKARAM HEADER
+===================================================== */
+.rk-header{
+  display:none;position:sticky;top:0;z-index:200;
+  align-items:center;gap:14px;padding:12px 28px;
+  background:rgba(13,10,26,.85);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--rk-border);
+  animation:hdrIn .5s cubic-bezier(.2,.9,.2,1) both;
+}
+body.mode-rk .rk-header{display:flex}
+@keyframes hdrIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+
+.rk-logo{
+  width:48px;height:48px;border-radius:13px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--rk-saffron),var(--rk-rose));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Yeseva One',serif;font-size:19px;color:#fff;
+  animation:logoPulse 3s ease infinite;
+}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 16px rgba(255,107,0,.4)}50%{box-shadow:0 0 36px rgba(255,107,0,.7)}}
+.rk-brand h1{font-family:'Yeseva One',serif;font-size:20px;background:linear-gradient(90deg,var(--rk-turmeric),var(--rk-saffron),var(--rk-rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rk-brand p{font-size:11px;color:var(--rk-muted);text-transform:uppercase;letter-spacing:.7px;margin-top:1px}
+
+.rk-search{flex:1;max-width:440px;margin:0 auto;display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:999px;
+  padding:0 18px;height:42px;transition:border-color .2s,box-shadow .2s}
+.rk-search:focus-within{border-color:var(--rk-saffron);box-shadow:0 0 0 4px rgba(255,107,0,.12)}
+.rk-search input{background:none;border:none;outline:none;color:#fff;font-size:14px;font-weight:600;width:100%}
+.rk-search input::placeholder{color:var(--rk-muted);font-weight:400}
+
+.rk-hdr-icons{display:flex;align-items:center;gap:8px}
+.icon-btn{position:relative;width:42px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--rk-border);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  color:#fff;cursor:none;transition:all .2s}
+.icon-btn:hover{background:rgba(255,107,0,.12);border-color:var(--rk-saffron)}
+.icon-btn .cbadge{position:absolute;top:-6px;right:-6px;background:var(--rk-rose);color:#fff;
+  font-size:10px;font-weight:900;width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);
+  transition:opacity .2s,transform .3s cubic-bezier(.34,1.56,.64,1);border:2px solid var(--rk-bg)}
+.icon-btn .cbadge.show{opacity:1;transform:scale(1)}
+
+/* =====================================================
+   ██████  AMAZON HEADER
+===================================================== */
+.az-header{display:none;flex-direction:column;position:sticky;top:0;z-index:200;font-family:'Nunito',sans-serif}
+body.mode-az .az-header{display:flex}
+
+/* Top nav bar */
+.az-nav1{
+  background:var(--az-navy);color:#fff;
+  display:flex;align-items:center;gap:10px;padding:8px 16px;
+}
+.az-logo-box{display:flex;flex-direction:column;align-items:flex-start;border:1.5px solid transparent;
+  padding:4px 8px;border-radius:3px;cursor:pointer;transition:border-color .15s;flex-shrink:0}
+.az-logo-box:hover{border-color:#fff}
+.az-logo-text{font-family:'Yeseva One',serif;font-size:18px;color:#fff;line-height:1}
+.az-logo-sub{font-size:9px;color:var(--az-orange);font-weight:800;text-align:right;letter-spacing:.3px;margin-top:1px}
+
+/* Amazon search bar */
+.az-search-wrap{flex:1;display:flex;height:40px;border-radius:4px;overflow:hidden;max-width:700px;margin:0 8px}
+.az-search-cat{
+  background:#F3F3F3;border:none;border-right:1px solid var(--az-border);
+  padding:0 10px;font-size:12px;color:#555;cursor:pointer;white-space:nowrap;
+  border-radius:4px 0 0 4px;
+}
+.az-search-input{flex:1;border:none;outline:none;padding:0 12px;font-size:14px;color:#111;background:#fff}
+.az-search-btn{width:46px;background:var(--az-orange);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;border-radius:0 4px 4px 0}
+.az-search-btn:hover{background:var(--az-orange2)}
+.az-search-btn svg{color:var(--az-navy)}
+
+.az-nav-icons{display:flex;align-items:center;gap:2px;margin-left:auto}
+.az-nav-btn{
+  display:flex;flex-direction:column;padding:5px 10px;border-radius:3px;cursor:pointer;
+  border:1.5px solid transparent;transition:border-color .15s;white-space:nowrap;
+}
+.az-nav-btn:hover{border-color:#fff}
+.az-nav-btn .top{font-size:11px;color:rgba(255,255,255,.75)}
+.az-nav-btn .bot{font-size:13px;font-weight:900;color:#fff}
+.az-cart-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:3px;cursor:pointer;border:1.5px solid transparent;transition:border-color .15s}
+.az-cart-btn:hover{border-color:#fff}
+.az-cart-btn .cart-icon{font-size:26px;line-height:1;position:relative}
+.az-cart-count{
+  position:absolute;top:-4px;right:-4px;background:var(--az-orange);color:#111;
+  font-size:11px;font-weight:900;min-width:20px;height:20px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;
+}
+.az-cart-label{font-size:13px;font-weight:900;color:#fff;align-self:flex-end}
+
+/* Bottom nav bar */
+.az-nav2{
+  background:var(--az-nav2);color:#fff;
+  display:flex;align-items:center;gap:2px;padding:4px 10px;overflow-x:auto;scrollbar-width:none;
+}
+.az-nav2::-webkit-scrollbar{display:none}
+.az-nav2-btn{
+  padding:6px 12px;font-size:13px;font-weight:700;white-space:nowrap;
+  border-radius:3px;border:1.5px solid transparent;cursor:pointer;transition:border-color .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.az-nav2-btn:hover{border-color:#fff}
+.az-nav2-btn.active{border-color:#fff}
+
+/* =====================================================
+   MARQUEE (Rasakaram only)
+===================================================== */
+.rk-marquee{display:none;overflow:hidden;position:relative;z-index:1;
+  background:linear-gradient(90deg,var(--rk-saffron),var(--rk-rose),var(--rk-turmeric),var(--rk-mint),var(--rk-saffron));
+  background-size:400%;animation:gradMove 6s linear infinite;padding:9px 0}
+body.mode-rk .rk-marquee{display:block}
+@keyframes gradMove{to{background-position:-400% 0}}
+.marquee-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.mq-item{padding:0 28px;font-size:12px;font-weight:800;color:#0D0A1A;text-transform:uppercase;
+  letter-spacing:1.5px;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.mq-item::after{content:"✦";font-size:9px;opacity:.6}
+
+/* =====================================================
+   AMAZON DEALS BANNER
+===================================================== */
+.az-banner{display:none;background:linear-gradient(90deg,#232F3E,#37475A);padding:10px 20px;
+  align-items:center;gap:14px;position:relative;z-index:1;border-bottom:2px solid var(--az-orange)}
+body.mode-az .az-banner{display:flex}
+.az-banner-text{font-size:13px;font-weight:700;color:#fff}
+.az-banner-text span{color:var(--az-orange)}
+.az-deal-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1}
+.az-deal-chips::-webkit-scrollbar{display:none}
+.az-deal-chip{
+  background:rgba(255,153,0,.12);border:1px solid rgba(255,153,0,.3);
+  color:var(--az-orange);padding:4px 12px;border-radius:3px;font-size:12px;font-weight:800;
+  white-space:nowrap;cursor:pointer;transition:background .15s;
+}
+.az-deal-chip:hover{background:rgba(255,153,0,.25)}
+
+/* =====================================================
+   HERO — RASAKARAM
+===================================================== */
+.rk-hero{
+  display:none;position:relative;z-index:1;padding:56px 32px 44px;
+  display:none;grid-template-columns:1fr 1fr;gap:40px;align-items:center;overflow:hidden;
+}
+body.mode-rk .rk-hero{display:grid}
+.rk-hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle 500px at 0% 50%,rgba(255,107,0,.07),transparent),
+    radial-gradient(circle 400px at 100% 50%,rgba(232,25,78,.06),transparent)}
+.rk-hero-bgword{position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+  font-family:'Yeseva One',serif;font-size:180px;color:rgba(255,107,0,.04);pointer-events:none;
+  white-space:nowrap;animation:floatWord 6s ease-in-out infinite}
+@keyframes floatWord{0%,100%{transform:translateY(-50%)}50%{transform:translateY(-54%) translateX(-8px)}}
+.rk-hero-left{animation:fadeUp .7s ease .1s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.rk-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,194,0,.1);
+  border:1px solid rgba(255,194,0,.3);color:var(--rk-turmeric);border-radius:999px;
+  padding:6px 14px;font-size:11px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:16px}
+.rk-pill span{width:7px;height:7px;background:var(--rk-turmeric);border-radius:50%;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.rk-hero h2{font-family:'Yeseva One',serif;font-size:clamp(32px,4vw,58px);line-height:1.1;
+  letter-spacing:-1px;margin-bottom:16px}
+.rk-hero h2 .accent{display:block;background:linear-gradient(90deg,var(--rk-turmeric),var(--rk-saffron),var(--rk-rose));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 3s ease infinite;background-size:200%}
+@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+.rk-hero p{font-size:14px;color:var(--rk-muted);line-height:1.8;margin-bottom:24px;max-width:400px}
+.rk-hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.rk-hero-stats{display:flex;gap:24px;margin-top:24px;padding-top:20px;border-top:1px solid var(--rk-border)}
+.rk-stat .num{font-family:'Yeseva One',serif;font-size:24px;background:linear-gradient(90deg,var(--rk-turmeric),var(--rk-saffron));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rk-stat .lbl{font-size:10px;color:var(--rk-muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+.rk-hero-right{position:relative;animation:fadeUp .7s ease .25s both;min-height:320px}
+.rk-hero-img{border-radius:22px;overflow:hidden;height:310px;box-shadow:0 28px 70px rgba(0,0,0,.6);
+  position:relative;border:1px solid rgba(255,255,255,.07)}
+.rk-hero-img img{width:100%;height:100%;object-fit:cover}
+.rk-hero-img::after{content:'';position:absolute;inset:0;border-radius:22px;background:linear-gradient(180deg,transparent 40%,rgba(13,10,26,.5))}
+.rk-float-tag{position:absolute;bottom:14px;left:14px;z-index:5;background:rgba(13,10,26,.75);
+  backdrop-filter:blur(10px);border:1px solid rgba(255,194,0,.25);border-radius:10px;padding:8px 12px}
+.rk-float-tag .ft-lbl{font-size:10px;color:var(--rk-turmeric);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.rk-float-tag .ft-val{font-size:14px;font-weight:900;margin-top:2px}
+.rk-orbit{position:absolute;top:-12px;right:-12px;z-index:6;width:68px;height:68px;border-radius:50%;
+  background:linear-gradient(135deg,var(--rk-turmeric),var(--rk-saffron));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-weight:900;font-size:10px;color:#0D0A1A;text-align:center;line-height:1.3;
+  box-shadow:0 0 28px rgba(255,194,0,.5);animation:spin3d 8s linear infinite}
+@keyframes spin3d{0%,100%{transform:rotate(0deg)}50%{transform:rotate(180deg) scale(1.05)}}
+
+/* =====================================================
+   AMAZON HERO CAROUSEL AREA
+===================================================== */
+.az-hero{display:none;position:relative;z-index:1;overflow:hidden;background:#fff;
+  border-bottom:1px solid var(--az-border)}
+body.mode-az .az-hero{display:block}
+.az-hero-inner{display:flex;align-items:center;gap:0;background:linear-gradient(135deg,#232F3E 0%,#37475A 40%,#131921 100%);
+  padding:32px 40px;min-height:200px;position:relative;overflow:hidden}
+.az-hero-inner::before{content:'BAZAR';position:absolute;right:-30px;font-family:'Yeseva One',serif;
+  font-size:160px;color:rgba(255,153,0,.06);line-height:1;pointer-events:none;top:50%;transform:translateY(-50%)}
+.az-hero-text h2{font-family:'Yeseva One',serif;font-size:clamp(24px,3vw,40px);color:#fff;margin-bottom:8px}
+.az-hero-text h2 span{color:var(--az-orange)}
+.az-hero-text p{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:18px;max-width:360px;line-height:1.7}
+.az-hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--az-orange);
+  color:#111;padding:10px 22px;border-radius:3px;font-weight:900;font-size:14px;
+  cursor:pointer;border:none;transition:background .15s}
+.az-hero-cta:hover{background:var(--az-orange2)}
+.az-hero-img{width:220px;height:160px;border-radius:8px;overflow:hidden;flex-shrink:0;margin-left:auto;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);border:2px solid rgba(255,153,0,.2)}
+.az-hero-img img{width:100%;height:100%;object-fit:cover}
+/* deal cards strip */
+.az-deal-strip{display:flex;gap:0;border-top:1px solid var(--az-border)}
+.az-deal-card{flex:1;padding:14px 16px;background:#fff;border-right:1px solid var(--az-border);cursor:pointer;transition:background .15s}
+.az-deal-card:last-child{border-right:none}
+.az-deal-card:hover{background:#F7F8F8}
+.az-deal-card .dc-title{font-size:13px;font-weight:900;color:var(--az-text);margin-bottom:4px}
+.az-deal-card .dc-sub{font-size:11px;color:var(--az-red);font-weight:800}
+.az-deal-card .dc-img{height:80px;overflow:hidden;border-radius:4px;margin-top:8px;background:var(--az-bg)}
+.az-deal-card .dc-img img{width:100%;height:100%;object-fit:cover}
+
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
+.page-layout{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:0;position:relative;z-index:1}
+
+/* =====================================================
+   CATEGORY FILTERS — RASAKARAM
+===================================================== */
+.rk-cats{display:none;position:relative;z-index:1;padding:0 32px;
+  border-bottom:1px solid var(--rk-border)}
+body.mode-rk .rk-cats{display:block}
+.rk-cats::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rk-saffron),var(--rk-rose),transparent)}
+.rk-cat-scroll{display:flex;gap:6px;padding:16px 0;overflow-x:auto;scrollbar-width:none}
+.rk-cat-scroll::-webkit-scrollbar{display:none}
+.rk-chip{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:999px;border:none;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.07);
+  color:var(--rk-muted);font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0;
+  cursor:none;transition:all .2s}
+.rk-chip:hover{color:#fff;border-color:rgba(255,107,0,.4);transform:translateY(-2px)}
+.rk-chip.active{background:linear-gradient(90deg,var(--rk-saffron),var(--rk-rose));
+  border-color:transparent;color:#fff;box-shadow:0 5px 18px rgba(255,107,0,.3);transform:translateY(-2px)}
+
+/* =====================================================
+   CATEGORY FILTERS — AMAZON
+===================================================== */
+.az-cats{display:none;background:var(--az-white);border-bottom:1px solid var(--az-border);
+  padding:0 16px;position:relative;z-index:1}
+body.mode-az .az-cats{display:block}
+.az-cat-scroll{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.az-cat-scroll::-webkit-scrollbar{display:none}
+.az-cat-btn{
+  padding:10px 16px;font-size:13px;font-weight:700;white-space:nowrap;
+  background:none;border:none;border-bottom:3px solid transparent;color:var(--az-muted);
+  cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:7px;
+}
+.az-cat-btn:hover{color:var(--az-text);border-bottom-color:var(--az-orange)}
+.az-cat-btn.active{color:var(--az-text);border-bottom-color:var(--az-orange);font-weight:900}
+
+/* =====================================================
+   PRODUCTS SECTION — shared wrapper
+===================================================== */
+.products-wrap{padding:22px 28px}
+body.mode-az .products-wrap{padding:16px 20px;background:var(--az-bg)}
+
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+.sec-head h3{font-family:'Yeseva One',serif;font-size:22px}
+body.mode-az .sec-head h3{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--az-text)}
+.sec-head h3 .grd{background:linear-gradient(90deg,var(--rk-saffron),var(--rk-rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rk-count{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.2);color:var(--rk-saffron)}
+.az-count{font-size:12px;color:var(--az-muted)}
+
+/* Sort + view toggle (Amazon) */
+.az-toolbar{display:none;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--az-border)}
+body.mode-az .az-toolbar{display:flex}
+.az-sort-label{font-size:13px;color:var(--az-muted)}
+.az-sort-select{border:1px solid var(--az-border);border-radius:3px;padding:5px 10px;font-size:13px;background:#fff;cursor:pointer;color:var(--az-text)}
+.view-toggle-btns{display:flex;gap:4px;margin-left:auto}
+.vtb{width:32px;height:32px;border:1px solid var(--az-border);background:#fff;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s}
+.vtb.active,.vtb:hover{background:var(--az-orange);border-color:var(--az-orange2)}
+
+/* =====================================================
+   PRODUCT GRID — RASAKARAM CARDS
+===================================================== */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+body.mode-az .prod-grid.list-view{grid-template-columns:1fr;gap:10px}
+
+/* RASAKARAM CARD */
+.card{border-radius:18px;overflow:hidden;position:relative;
+  transform:translateY(20px);opacity:0;
+  transition:transform .38s cubic-bezier(.2,.9,.2,1),opacity .38s,border-color .22s,box-shadow .28s;
+  cursor:pointer;}
+.card.vis{transform:translateY(0);opacity:1}
+body.mode-rk .card{background:#13102A;border:1px solid var(--rk-border)}
+body.mode-rk .card:hover{border-color:rgba(255,107,0,.35);
+  box-shadow:0 18px 55px rgba(0,0,0,.45),0 0 0 1px rgba(255,107,0,.1);
+  transform:translateY(-7px) scale(1.01)!important}
+body.mode-rk .card::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.04) 50%,transparent 80%);
+  transform:translateX(-100%);transition:transform 0s}
+body.mode-rk .card:hover::before{transform:translateX(100%);transition:transform .5s ease}
+
+/* AMAZON CARD */
+body.mode-az .card{background:var(--az-card);border:1px solid var(--az-border);border-radius:4px;
+  box-shadow:0 2px 5px rgba(15,17,17,.15)}
+body.mode-az .card:hover{box-shadow:0 4px 15px rgba(15,17,17,.2);transform:translateY(-2px) !important;border-color:#aaa}
+
+/* LIST VIEW card (Amazon) */
+body.mode-az .list-view .card{display:flex;flex-direction:row;max-height:200px;border-radius:4px}
+body.mode-az .list-view .card .card-img{width:180px;height:180px;flex-shrink:0;border-radius:0}
+body.mode-az .list-view .card .card-body{flex:1;display:flex;flex-direction:column}
+
+.card-img{overflow:hidden;position:relative}
+body.mode-rk .card-img{height:160px;background:linear-gradient(135deg,rgba(255,107,0,.05),rgba(232,25,78,.05))}
+body.mode-az .card-img{height:180px;background:#F0F2F2}
+body.mode-az .list-view .card .card-img{height:100%}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+body.mode-rk .card:hover .card-img img{transform:scale(1.09) rotate(-1deg)}
+body.mode-az .card:hover .card-img img{transform:scale(1.04)}
+
+/* Tag / badge overlays */
+.rk-tag{position:absolute;top:9px;left:9px;z-index:3;padding:3px 9px;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+  background:rgba(13,10,26,.7);backdrop-filter:blur(6px);border:1px solid rgba(255,194,0,.2);color:var(--rk-turmeric)}
+body.mode-az .rk-tag{display:none}
+.rk-new{position:absolute;top:9px;right:9px;z-index:3;padding:3px 8px;border-radius:999px;
+  font-size:9px;font-weight:900;background:linear-gradient(90deg,var(--rk-mint),#00a87c);color:#fff;text-transform:uppercase}
+body.mode-az .rk-new{display:none}
+.rk-like{position:absolute;bottom:9px;right:9px;z-index:3;width:30px;height:30px;border-radius:50%;
+  background:rgba(13,10,26,.7);backdrop-filter:blur(6px);border:1px solid var(--rk-border);
+  display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;
+  opacity:0;transform:scale(.7);transition:opacity .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+body.mode-rk .card:hover .rk-like{opacity:1;transform:scale(1)}
+body.mode-az .rk-like{display:none}
+.rk-like.liked{opacity:1;background:rgba(232,25,78,.25);border-color:var(--rk-rose)}
+
+/* Amazon badge overlays */
+.az-badge-wrap{display:none;position:absolute;top:8px;left:8px;z-index:3;display:flex;flex-direction:column;gap:4px}
+body.mode-az .az-badge-wrap{display:flex}
+.az-discount-badge{background:var(--az-red);color:#fff;font-size:12px;font-weight:900;padding:3px 7px;border-radius:3px}
+.az-prime-badge{display:flex;align-items:center;gap:3px;background:#00A8E0;color:#fff;font-size:10px;font-weight:900;padding:2px 6px;border-radius:3px}
+.az-wishlist{position:absolute;top:8px;right:8px;z-index:3;width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:1px solid var(--az-border);
+  display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;
+  opacity:0;transform:scale(.8);transition:opacity .18s,transform .22s,box-shadow .18s}
+.card:hover .az-wishlist{opacity:1;transform:scale(1)}
+.az-wishlist:hover{box-shadow:0 2px 8px rgba(0,0,0,.2)}
+body.mode-rk .az-wishlist{display:none}
+
+/* Card body */
+.card-body{padding:13px}
+body.mode-az .card-body{padding:12px}
+.card-cat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px}
+body.mode-rk .card-cat-lbl{color:var(--rk-muted)}
+body.mode-az .card-cat-lbl{color:var(--az-blue)}
+.card-title{font-size:14px;font-weight:800;line-height:1.3;margin-bottom:4px}
+body.mode-az .card-title{font-size:13px;font-weight:700;color:var(--az-text)}
+body.mode-az .card:hover .card-title{color:var(--az-orange2)}
+.card-desc{font-size:12px;line-height:1.5;margin-bottom:10px}
+body.mode-rk .card-desc{color:var(--rk-muted)}
+body.mode-az .card-desc{color:var(--az-muted)}
+
+/* Stars */
+.stars-row{display:none;align-items:center;gap:5px;margin-bottom:6px}
+body.mode-az .stars-row{display:flex}
+.stars{color:var(--az-orange);font-size:13px;letter-spacing:-1px}
+.star-count{font-size:12px;color:var(--az-blue);text-decoration:underline;cursor:pointer}
+
+/* Price */
+.price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
+.rk-price{font-family:'Yeseva One',serif;font-size:18px;color:var(--rk-turmeric)}
+body.mode-az .rk-price{display:none}
+.az-price-wrap{display:none;flex-direction:column;gap:2px}
+body.mode-az .az-price-wrap{display:flex}
+.az-price-main{font-size:18px;font-weight:900;color:var(--az-red)}
+.az-price-main sup{font-size:13px;vertical-align:super}
+.az-price-was{font-size:12px;color:var(--az-muted);text-decoration:line-through}
+.az-price-save{font-size:12px;color:var(--az-green);font-weight:700}
+.az-delivery{font-size:12px;color:var(--az-green);font-weight:700;margin-bottom:8px;display:none}
+body.mode-az .az-delivery{display:block}
+
+/* Card actions */
+.card-actions{display:flex;gap:6px}
+/* Rasakaram buttons */
+body.mode-rk .cbtn-add{background:linear-gradient(90deg,var(--rk-saffron),var(--rk-rose));color:#fff;
+  box-shadow:0 4px 14px rgba(255,107,0,.25);padding:8px 14px;border-radius:10px;border:none;font-size:12px;font-weight:800;cursor:none;transition:all .18s}
+body.mode-rk .cbtn-add:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,107,0,.4)}
+body.mode-rk .cbtn-view{background:rgba(255,255,255,.05);border:1px solid var(--rk-border);color:var(--rk-muted);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:800;cursor:none;transition:all .18s}
+body.mode-rk .cbtn-view:hover{border-color:var(--rk-saffron);color:var(--rk-saffron)}
+/* Amazon buttons */
+body.mode-az .cbtn-add{background:linear-gradient(180deg,#FFD814,#F7CA00);color:#111;
+  border:1px solid #FCD200;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;box-shadow:0 2px 5px rgba(15,17,17,.1)}
+body.mode-az .cbtn-add:hover{background:linear-gradient(180deg,#F7CA00,#E9B800)}
+body.mode-az .cbtn-view{background:linear-gradient(180deg,#FFA41C,#FF8F00);color:#111;
+  border:1px solid #E47911;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+body.mode-az .cbtn-view:hover{background:linear-gradient(180deg,#FF8F00,#E47911)}
+
+/* In stock indicator */
+.az-instock{display:none;font-size:12px;color:var(--az-green);font-weight:700;margin-bottom:8px}
+body.mode-az .az-instock{display:block}
+
+/* =====================================================
+   CART SIDEBAR — RASAKARAM
+===================================================== */
+.rk-cart{display:none;background:var(--rk-ink);border-left:1px solid var(--rk-border);
+  position:sticky;top:68px;height:calc(100vh - 68px);flex-direction:column;overflow:hidden}
+body.mode-rk .rk-cart{display:flex}
+
+/* =====================================================
+   CART SIDEBAR — AMAZON
+===================================================== */
+.az-cart{display:none;background:var(--az-white);border-left:1px solid var(--az-border);
+  position:sticky;top:68px;height:calc(100vh - 68px);flex-direction:column;overflow:hidden}
+body.mode-az .az-cart{display:flex}
+
+/* Shared cart internals */
+.cart-top-inner{padding:16px 16px 0;flex-shrink:0}
+.cart-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+body.mode-rk .cart-title-row h3{font-family:'Yeseva One',serif;font-size:18px}
+body.mode-az .cart-title-row h3{font-size:17px;font-weight:900;color:var(--az-text)}
+.cart-divider{height:1px;margin:0 0 4px}
+body.mode-rk .cart-divider{background:var(--rk-border)}
+body.mode-az .cart-divider{background:var(--az-border)}
+.cart-scroll-inner{flex:1;overflow-y:auto;padding:12px 16px;scrollbar-width:thin}
+body.mode-rk .cart-scroll-inner{scrollbar-color:rgba(255,107,0,.2) transparent}
+body.mode-az .cart-scroll-inner{scrollbar-color:rgba(0,0,0,.15) transparent}
+
+.cart-empty-msg{text-align:center;padding:40px 14px}
+body.mode-rk .cart-empty-msg .emo{font-size:38px;margin-bottom:10px}
+body.mode-az .cart-empty-msg .emo{font-size:38px;margin-bottom:10px}
+.cart-empty-msg p{font-size:13px;line-height:1.7}
+body.mode-rk .cart-empty-msg p{color:var(--rk-muted)}
+body.mode-az .cart-empty-msg p{color:var(--az-muted)}
+
+.cart-item-row{display:flex;gap:10px;padding:10px 0;
+  border-bottom:1px solid;}
+body.mode-rk .cart-item-row{border-color:var(--rk-border)}
+body.mode-az .cart-item-row{border-color:var(--az-border)}
+.ci-thumb{width:56px;height:56px;border-radius:8px;overflow:hidden;flex-shrink:0}
+body.mode-az .ci-thumb{border-radius:3px;border:1px solid var(--az-border)}
+.ci-thumb img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.mode-az .ci-name{font-weight:700;color:var(--az-text)}
+.ci-tag-lbl{font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:.4px;margin-top:1px}
+body.mode-rk .ci-tag-lbl{color:var(--rk-muted)}
+body.mode-az .ci-tag-lbl{color:var(--az-blue);font-size:11px;text-transform:none;letter-spacing:0;font-weight:400}
+.ci-qty-row{display:flex;align-items:center;gap:5px;margin-top:7px}
+.qb{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+body.mode-rk .qb{border-radius:7px;border:1.5px solid var(--rk-border);background:rgba(255,255,255,.04);color:#fff;cursor:none}
+body.mode-rk .qb:hover{border-color:var(--rk-saffron);background:rgba(255,107,0,.1)}
+body.mode-az .qb{border:1px solid var(--az-border);border-radius:3px;background:#F0F2F2;color:var(--az-text);cursor:pointer}
+body.mode-az .qb:hover{background:var(--az-border)}
+.qn{font-size:13px;font-weight:900;min-width:20px;text-align:center}
+body.mode-az .qn{color:var(--az-text)}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0}
+.ci-price{font-weight:800;font-size:14px}
+body.mode-rk .ci-price{font-family:'Yeseva One',serif;color:var(--rk-turmeric)}
+body.mode-az .ci-price{color:var(--az-red)}
+.ci-remove{background:none;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:color .15s}
+body.mode-rk .ci-remove{color:var(--rk-muted);cursor:none}
+body.mode-rk .ci-remove:hover{color:var(--rk-rose)}
+body.mode-az .ci-remove{color:var(--az-blue)}
+body.mode-az .ci-remove:hover{color:var(--az-orange2);text-decoration:underline}
+
+.cart-foot-inner{padding:14px 16px;flex-shrink:0}
+body.mode-rk .cart-foot-inner{border-top:1px solid var(--rk-border)}
+body.mode-az .cart-foot-inner{border-top:1px solid var(--az-border)}
+
+.summary-line{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+body.mode-rk .summary-line{color:var(--rk-muted)}
+body.mode-az .summary-line{color:var(--az-muted)}
+.summary-total-row{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
+body.mode-rk .summary-total-row .tlabel{font-weight:800;font-size:14px}
+body.mode-az .summary-total-row .tlabel{font-weight:900;font-size:15px;color:var(--az-text)}
+body.mode-rk .summary-total-row .tamount{font-family:'Yeseva One',serif;font-size:20px;color:var(--rk-turmeric)}
+body.mode-az .summary-total-row .tamount{font-size:18px;font-weight:900;color:var(--az-red)}
+
+/* Checkout buttons */
+.rk-checkout-btn{width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--rk-saffron),var(--rk-rose));color:#fff;
+  font-size:14px;font-weight:900;cursor:none;transition:transform .18s,box-shadow .18s;
+  font-family:inherit;position:relative;overflow:hidden;
+  box-shadow:0 6px 22px rgba(255,107,0,.3)}
+.rk-checkout-btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,107,0,.45)}
+.rk-checkout-btn::after{content:'';position:absolute;top:-50%;left:-75%;width:50%;height:200%;
+  background:rgba(255,255,255,.15);transform:skewX(-20deg);animation:shine 3s 1s infinite}
+@keyframes shine{0%,90%,100%{left:-75%}45%{left:125%}}
+.az-proceed-btn{width:100%;padding:10px;border-radius:20px;border:1px solid #FCD200;
+  background:linear-gradient(180deg,#FFD814,#F7CA00);color:#111;font-size:14px;font-weight:900;
+  cursor:pointer;font-family:inherit;transition:all .15s;margin-bottom:8px}
+.az-proceed-btn:hover{background:linear-gradient(180deg,#F7CA00,#E9B800)}
+.az-buybox-note{font-size:11px;text-align:center;color:var(--az-muted);line-height:1.5}
+
+/* Cart count badges */
+.rk-items-count{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;
+  background:rgba(255,107,0,.12);color:var(--rk-saffron);border:1px solid rgba(255,107,0,.2)}
+.az-items-count{font-size:12px;color:var(--az-muted)}
+.cart-clear-btn{background:none;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:color .15s}
+body.mode-rk .cart-clear-btn{color:var(--rk-muted);cursor:none}
+body.mode-rk .cart-clear-btn:hover{color:var(--rk-rose)}
+body.mode-az .cart-clear-btn{color:var(--az-blue)}
+body.mode-az .cart-clear-btn:hover{color:var(--az-orange2);text-decoration:underline}
+
+/* =====================================================
+   MODAL
+===================================================== */
+.modal-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+body.mode-rk .modal-overlay{background:rgba(0,0,0,.7);backdrop-filter:blur(12px)}
+body.mode-az .modal-overlay{background:rgba(15,17,17,.5);backdrop-filter:blur(4px)}
+.modal-box{width:100%;max-width:580px;overflow:hidden;transform:scale(.93) translateY(12px);transition:transform .3s cubic-bezier(.2,.9,.2,1)}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+body.mode-rk .modal-box{background:var(--rk-ink);border-radius:22px;border:1px solid var(--rk-border)}
+body.mode-az .modal-box{background:#fff;border-radius:4px;box-shadow:0 10px 40px rgba(15,17,17,.25)}
+.modal-img-zone{height:260px;overflow:hidden;position:relative}
+.modal-img-zone img{width:100%;height:100%;object-fit:cover}
+body.mode-rk .modal-img-zone::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--rk-ink),transparent 50%)}
+.modal-close-btn{position:absolute;top:12px;right:12px;z-index:10;width:34px;height:34px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:background .15s;border:none}
+body.mode-rk .modal-close-btn{background:rgba(0,0,0,.5);backdrop-filter:blur(6px);color:#fff;border:1.5px solid rgba(255,255,255,.1)}
+body.mode-rk .modal-close-btn:hover{background:var(--rk-rose)}
+body.mode-az .modal-close-btn{background:rgba(255,255,255,.9);color:var(--az-text);border:1px solid var(--az-border)}
+body.mode-az .modal-close-btn:hover{background:var(--az-bg)}
+.modal-body{padding:0 22px 22px}
+body.mode-az .modal-body{padding:16px 22px 22px}
+.modal-tag-pill{display:inline-flex;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+body.mode-rk .modal-tag-pill{background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.2);color:var(--rk-saffron)}
+body.mode-az .modal-tag-pill{background:rgba(0,113,133,.1);border:1px solid rgba(0,113,133,.2);color:var(--az-blue)}
+.modal-title{font-family:'Yeseva One',serif;font-size:22px;margin-bottom:8px}
+body.mode-az .modal-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--az-text)}
+.modal-desc{font-size:13px;line-height:1.75;margin-bottom:14px}
+body.mode-rk .modal-desc{color:var(--rk-muted)}
+body.mode-az .modal-desc{color:var(--az-muted)}
+.modal-stars{display:none;align-items:center;gap:8px;margin-bottom:10px}
+body.mode-az .modal-stars{display:flex}
+.modal-price{margin-bottom:16px}
+body.mode-rk .modal-price{font-family:'Yeseva One',serif;font-size:28px;color:var(--rk-turmeric)}
+body.mode-az .modal-price{font-size:24px;font-weight:900;color:var(--az-red)}
+.modal-actions{display:flex;align-items:center;gap:10px}
+.modal-qty-ctrl{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px}
+body.mode-rk .modal-qty-ctrl{background:rgba(255,255,255,.04);border:1.5px solid var(--rk-border)}
+body.mode-az .modal-qty-ctrl{background:#F0F2F2;border:1px solid var(--az-border);border-radius:3px}
+.modal-qty-ctrl button{background:none;border:none;font-size:17px;cursor:pointer;line-height:1;transition:color .15s}
+body.mode-rk .modal-qty-ctrl button{color:#fff;cursor:none}
+body.mode-rk .modal-qty-ctrl button:hover{color:var(--rk-saffron)}
+body.mode-az .modal-qty-ctrl button{color:var(--az-text)}
+body.mode-az .modal-qty-ctrl button:hover{color:var(--az-orange)}
+.modal-qty-ctrl span{font-size:14px;font-weight:900;min-width:24px;text-align:center}
+body.mode-az .modal-qty-ctrl span{color:var(--az-text)}
+.modal-add-btn{flex:1;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;transition:all .18s}
+body.mode-rk .modal-add-btn{background:linear-gradient(135deg,var(--rk-saffron),var(--rk-rose));color:#fff;box-shadow:0 5px 18px rgba(255,107,0,.28);cursor:none}
+body.mode-rk .modal-add-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,107,0,.42)}
+body.mode-az .modal-add-btn{background:linear-gradient(180deg,#FFD814,#F7CA00);color:#111;border:1px solid #FCD200;border-radius:20px}
+body.mode-az .modal-add-btn:hover{background:linear-gradient(180deg,#F7CA00,#E9B800)}
+
+/* =====================================================
+   TOASTS
+===================================================== */
+#toaster{position:fixed;bottom:24px;right:24px;z-index:600;display:flex;flex-direction:column;gap:7px;align-items:flex-end}
+.toast{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:12px;
+  font-size:13px;font-weight:700;animation:toastIn .35s cubic-bezier(.34,1.56,.64,1) both;
+  max-width:290px;position:relative;overflow:hidden}
+body.mode-rk .toast{background:var(--rk-ink);border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 10px 35px rgba(0,0,0,.5),0 0 0 1px rgba(255,107,0,.08)}
+body.mode-az .toast{background:#fff;border:1px solid var(--az-border);box-shadow:0 4px 14px rgba(15,17,17,.15);border-radius:4px}
+body.mode-az .toast{color:var(--az-text)}
+.toast-icon{font-size:16px}
+.toast-bar{position:absolute;bottom:0;left:0;height:2px;animation:tbar 2.2s linear forwards}
+body.mode-rk .toast-bar{background:linear-gradient(90deg,var(--rk-saffron),var(--rk-rose))}
+body.mode-az .toast-bar{background:var(--az-orange)}
+@keyframes toastIn{from{transform:translateX(28px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes tbar{from{width:100%}to{width:0%}}
+.toast-fade{animation:toastOut .28s ease forwards}
+@keyframes toastOut{to{transform:translateX(28px);opacity:0}}
+
+/* =====================================================
+   RIPPLE
+===================================================== */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);transform:scale(0);animation:rpl .6s linear;pointer-events:none}
+body.mode-az .ripple{background:rgba(0,0,0,.08)}
+@keyframes rpl{to{transform:scale(5);opacity:0}}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+footer{position:relative;z-index:1;padding:22px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+body.mode-rk footer{border-top:1px solid var(--rk-border)}
+body.mode-az footer{border-top:1px solid var(--az-border);background:var(--az-navy);color:#fff}
+body.mode-az footer p{color:rgba(255,255,255,.6);font-size:12px}
+.footer-logo{font-family:'Yeseva One',serif;font-size:15px}
+body.mode-rk .footer-logo{background:linear-gradient(90deg,var(--rk-turmeric),var(--rk-saffron),var(--rk-rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+body.mode-az .footer-logo{color:var(--az-orange)}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+.empty-state{grid-column:1/-1;text-align:center;padding:50px 20px}
+body.mode-rk .empty-state{color:var(--rk-muted)}
+body.mode-az .empty-state{color:var(--az-muted)}
+.empty-state .emo{font-size:44px;margin-bottom:14px;display:block;animation:bounce 1.4s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media(max-width:1060px){
+  .page-layout{grid-template-columns:1fr}
+  .rk-cart,.az-cart{position:fixed;right:0;top:0;bottom:0;width:320px;z-index:300;
+    transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.9,.2,1)}
+  .rk-cart.open,.az-cart.open{transform:translateX(0)}
+  body.mode-rk .rk-cart.open{box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+  body.mode-az .az-cart.open{box-shadow:-8px 0 30px rgba(15,17,17,.2)}
+}
+@media(max-width:700px){
+  .rk-header,.az-nav1{padding:10px 14px}
+  .rk-hero{padding:32px 16px 24px}
+  .rk-hero-bgword,.rk-orbit{display:none}
+  .rk-hero-right{display:none}
+  .products-wrap{padding:14px}
+  .rk-cats{padding:0 14px}
+  footer{padding:16px 14px}
+  .rk-cart,.az-cart{width:100%;max-width:100%}
+  .az-hero-img{display:none}
+  #cursor{display:none!important}*{cursor:auto!important}
+}
+</style>
+</head>
+<body class="mode-rk">
+<div id="cursor"></div>
+<div id="rk-bg-layer"></div>
+
+<!-- ═══════ RASAKARAM HEADER ═══════ -->
+<header class="rk-header">
+  <div class="rk-logo">RV</div>
+  <div class="rk-brand"><h1>RV BAZAR</h1><p>Dark Edition</p></div>
+  <div class="rk-search">
+    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" style="opacity:.5;flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <input id="rkSearch" placeholder="Search products, brands and more..." autocomplete="off"/>
+  </div>
+  <div class="rk-hdr-icons">
+    <button class="mode-toggle" id="modeBtn">☀️ RV BAZAR Mode</button>
+    <button class="icon-btn" id="rkCartBtn">🛍️<span class="cbadge" id="rkCartBadge">0</span></button>
+  </div>
+</header>
+
+<!-- ═══════ AMAZON HEADER ═══════ -->
+<header class="az-header">
+  <div class="az-nav1">
+    <div class="az-logo-box">
+      <div class="az-logo-text">rv bazar</div>
+      <div class="az-logo-sub">.in ▾</div>
+    </div>
+    <div style="display:flex;flex-direction:column;padding:4px 10px;border-radius:3px;cursor:pointer;border:1.5px solid transparent;flex-shrink:0" id="deliverBtn" onmouseenter="this.style.borderColor='#fff'" onmouseleave="this.style.borderColor='transparent'">
+      <span style="font-size:11px;color:rgba(255,255,255,.75)">📍 Deliver to</span>
+      <span style="font-size:13px;font-weight:900;color:#fff">Chennai 600001</span>
+    </div>
+    <div class="az-search-wrap">
+      <select class="az-search-cat" id="azSearchCat">
+        <option>All</option><option>Drinks</option><option>Snacks</option>
+        <option>Audio</option><option>Home</option><option>Watches</option>
+      </select>
+      <input class="az-search-input" id="azSearch" placeholder="Search RV Bazar..."/>
+      <button class="az-search-btn">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="az-nav-icons">
+      <button class="mode-toggle" id="modeBtnAz" style="margin-right:6px">🌶️ Dark Mode</button>
+      <div class="az-nav-btn"><span class="top">Returns</span><span class="bot">& Orders</span></div>
+      <div class="az-cart-btn" id="azCartBtn">
+        <div class="cart-icon" style="position:relative">🛒<span class="az-cart-count" id="azCartCount" style="opacity:0">0</span></div>
+        <span class="az-cart-label">Cart</span>
+      </div>
+    </div>
+  </div>
+  <div class="az-nav2" id="azNav2">
+    <div class="az-nav2-btn" style="font-weight:900">☰ All</div>
+    <div class="az-nav2-btn">Today's Deals</div>
+    <div class="az-nav2-btn">Customer Service</div>
+    <div class="az-nav2-btn">Gift Cards</div>
+    <div class="az-nav2-btn">New Arrivals</div>
+    <div class="az-nav2-btn">Best Sellers</div>
+    <div class="az-nav2-btn">Electronics</div>
+    <div class="az-nav2-btn">Pantry</div>
+    <div class="az-nav2-btn" style="color:#FF9900">Buy Again</div>
+  </div>
+</header>
+
+<!-- ═══════ RASAKARAM MARQUEE ═══════ -->
+<div class="rk-marquee"><div class="marquee-track">
+  <div class="mq-item">Free Delivery Today</div><div class="mq-item">Fresh Arrivals</div><div class="mq-item">RV Bazar Special</div><div class="mq-item">Best Deals</div><div class="mq-item">RV Collection</div><div class="mq-item">Shop Now</div><div class="mq-item">Top Quality</div><div class="mq-item">Fast Checkout</div>
+  <div class="mq-item">Free Delivery Today</div><div class="mq-item">Fresh Arrivals</div><div class="mq-item">RV Bazar Special</div><div class="mq-item">Best Deals</div><div class="mq-item">RV Collection</div><div class="mq-item">Shop Now</div><div class="mq-item">Top Quality</div><div class="mq-item">Fast Checkout</div>
+</div></div>
+
+<!-- ═══════ AMAZON DEALS BANNER ═══════ -->
+<div class="az-banner">
+  <div class="az-banner-text">🔥 <span>Today's Deals</span> — Limited Time!</div>
+  <div class="az-deal-chips">
+    <div class="az-deal-chip">Up to 40% off Snacks</div>
+    <div class="az-deal-chip">Audio under ₹3000</div>
+    <div class="az-deal-chip">Home Essentials Sale</div>
+    <div class="az-deal-chip">Buy 2 Get 1 Free</div>
+    <div class="az-deal-chip">Free Delivery on ₹499+</div>
+  </div>
+</div>
+
+<!-- ═══════ RASAKARAM HERO ═══════ -->
+<div class="rk-hero">
+  <div class="rk-hero-bgword">BAZAR</div>
+  <div class="rk-hero-left">
+    <div class="rk-pill"><span></span>Handpicked Selection 2025</div>
+    <h2><span style="display:block">Everything You Need,</span><span class="accent">All in one Bazar ✦</span></h2>
+    <p>Snacks to gadgets, drinks to décor — everything handpicked with care. One shop for all your daily essentials.</p>
+    <div class="rk-hero-btns">
+      <button class="rk-btn-fire" onclick="document.getElementById('prodGrid').scrollIntoView({behavior:'smooth'})">🛒 Shop Now</button>
+      <button class="rk-btn-outline" onclick="document.getElementById('rkCartBtn').click()">View Cart →</button>
+    </div>
+    <div class="rk-hero-stats">
+      <div class="rk-stat"><div class="num">20+</div><div class="lbl">Products</div></div>
+      <div class="rk-stat"><div class="num">8</div><div class="lbl">Categories</div></div>
+      <div class="rk-stat"><div class="num">★ 4.9</div><div class="lbl">Rating</div></div>
+    </div>
+  </div>
+  <div class="rk-hero-right">
+    <div class="rk-hero-img">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80" alt="Hero"/>
+      <div class="rk-float-tag"><div class="ft-lbl">🔥 Today's Pick</div><div class="ft-val">Aurora Lamp</div></div>
+    </div>
+    <div class="rk-orbit">NEW<br>IN!</div>
+  </div>
+</div>
+
+<!-- ═══════ AMAZON HERO ═══════ -->
+<div class="az-hero">
+  <div class="az-hero-inner">
+    <div class="az-hero-text">
+      <h2>Welcome to <span>RV Bazar</span></h2>
+      <p>Handpicked daily essentials — snacks, gadgets, drinks, décor and more. Fast delivery to your door.</p>
+      <button class="az-hero-cta" onclick="document.getElementById('prodGrid').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+    </div>
+    <div class="az-hero-img"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=75" alt=""/></div>
+  </div>
+  <div class="az-deal-strip" id="azDealStrip"></div>
+</div>
+
+<!-- ═══════ CATEGORY FILTERS ═══════ -->
+<div class="rk-cats"><div class="rk-cat-scroll" id="rkCats"></div></div>
+<div class="az-cats"><div class="az-cat-scroll" id="azCats"></div></div>
+
+<!-- ═══════ MAIN LAYOUT ═══════ -->
+<div class="page-layout">
+  <div class="products-wrap">
+    <div class="sec-head">
+      <h3><span class="grd" id="secTitle">Our Products</span></h3>
+      <div>
+        <span class="rk-count" id="rkCount">20 items</span>
+        <span class="az-count" id="azCount" style="display:none">1-20 of 20 results</span>
+      </div>
+    </div>
+    <!-- Amazon toolbar -->
+    <div class="az-toolbar">
+      <span class="az-sort-label">Sort by:</span>
+      <select class="az-sort-select" id="azSort">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Avg. Customer Review</option>
+      </select>
+      <div class="view-toggle-btns">
+        <button class="vtb active" id="gridViewBtn" title="Grid view">⊞</button>
+        <button class="vtb" id="listViewBtn" title="List view">☰</button>
+      </div>
+    </div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+
+  <!-- RASAKARAM CART -->
+  <aside class="rk-cart" id="rkCart">
+    <div class="cart-top-inner">
+      <div class="cart-title-row">
+        <h3>🛍️ Cart</h3>
+        <span class="rk-items-count" id="rkItemsCount">0 items</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0 10px">
+        <span style="font-size:12px;color:rgba(255,255,255,.35)">The best items from RV Bazar!</span>
+        <button class="cart-clear-btn" onclick="clearCart()">Clear All</button>
+      </div>
+      <div class="cart-divider"></div>
+    </div>
+    <div class="cart-scroll-inner" id="rkCartScroll">
+      <div class="cart-empty-msg" id="rkEmpty"><div class="emo">🛒</div><p>Your cart is empty.<br>Add something great!</p></div>
+      <div id="rkCartItems"></div>
+    </div>
+    <div class="cart-foot-inner" id="rkCartFoot" style="display:none">
+      <div class="summary-line"><span>Subtotal</span><span id="rkSubtotal">$0.00</span></div>
+      <div class="summary-line"><span>Delivery</span><span style="color:#00C48C;font-weight:800">FREE ✦</span></div>
+      <div class="summary-total-row"><span class="tlabel">Total</span><span class="tamount" id="rkTotal">$0.00</span></div>
+      <button class="rk-checkout-btn" onclick="doCheckout()">Checkout ✓ Pay Now</button>
+    </div>
+  </aside>
+
+  <!-- AMAZON CART -->
+  <aside class="az-cart" id="azCart">
+    <div class="cart-top-inner">
+      <div class="cart-title-row">
+        <h3>Shopping Cart</h3>
+        <span class="az-items-count" id="azItemsCount">0 items</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0 10px">
+        <span style="font-size:11px;color:#888">Price</span>
+        <button class="cart-clear-btn" onclick="clearCart()">Deselect all</button>
+      </div>
+      <div class="cart-divider"></div>
+    </div>
+    <div class="cart-scroll-inner" id="azCartScroll">
+      <div class="cart-empty-msg" id="azEmpty"><div class="emo">🛒</div><p>Your Amazon Cart is empty.<br>Shop today's deals →</p></div>
+      <div id="azCartItems"></div>
+    </div>
+    <div class="cart-foot-inner" id="azCartFoot" style="display:none">
+      <div class="summary-line"><span>Subtotal</span><span id="azSubtotal" style="font-weight:800">$0.00</span></div>
+      <div class="summary-line"><span>Delivery</span><span style="color:#007600;font-weight:800">FREE</span></div>
+      <div class="summary-total-row"><span class="tlabel">Order Total:</span><span class="tamount" id="azTotal">$0.00</span></div>
+      <button class="az-proceed-btn" onclick="doCheckout()">Proceed to Checkout</button>
+      <div class="az-buybox-note">Eligible for FREE Delivery • Secure transaction ✓</div>
+    </div>
+  </aside>
+</div>
+
+<!-- ═══════ MODAL ═══════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-img-zone">
+      <img id="mImg" src="" alt=""/>
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tag-pill" id="mTagPill"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-stars" id="mStars"><span class="stars">★★★★★</span><span class="star-count" style="color:#007185;font-size:12px">4,219 ratings</span></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-price" id="mPrice"></div>
+      <div class="modal-actions">
+        <div class="modal-qty-ctrl"><button id="mqMinus">−</button><span id="mqVal">1</span><button id="mqPlus">+</button></div>
+        <button class="modal-add-btn" id="mAddBtn">Add to Cart 🛒</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toaster"></div>
+
+<footer>
+  <div><div class="footer-logo">RV BAZAR ✦</div><p style="font-size:12px;margin-top:4px">© 2025 — Demo store by Aju Bro ❤️ &nbsp;|&nbsp; No real transactions</p></div>
+  <div style="font-size:17px;display:flex;gap:6px">✦ 🌶️ ✦ 🛍️ ✦ 🌟</div>
+</footer>
+
+<!-- Inline button styles for hero (need both themes) -->
+<style>
+.rk-btn-fire{padding:12px 24px;border-radius:13px;border:none;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:none;transition:all .18s;background:linear-gradient(135deg,#FF6B00,#E8194E);color:#fff;box-shadow:0 6px 22px rgba(255,107,0,.32)}
+.rk-btn-fire:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(255,107,0,.5)}
+.rk-btn-outline{padding:12px 24px;border-radius:13px;border:2px solid rgba(255,255,255,.12);background:transparent;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:none;transition:all .18s}
+.rk-btn-outline:hover{border-color:#FF6B00;color:#FF6B00}
+</style>
+
+<script>
+/* =====================================================
+   DATA
+===================================================== */
+const PRODUCTS = [
+  {id:1, title:"Crispello",          desc:"Cadbury Dairy Milk, recently released a new TVC for its chocolate brand Cadbury Dairy Milk Crispello.",price:20.00,was:25.00,img:"https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/NI_CATALOG/IMAGES/CIW/2025/5/28/06bc387b-0d9a-45a4-8256-e8a7c6983db6_591_4.png",tag:"Chocolates",isNew:true, rating:4.6,reviews:329},
+  {id:2, title:"Tilo Drinks",        desc:"Chilled refreshing bottle drink, perfect for summer",    price:10.00,was:14.00,img:"https://i.pinimg.com/736x/6f/c9/60/6fc960418fa4f16ee99b9f07c9e40665.jpg",tag:"Drinks",    isNew:false,rating:4.2,reviews:897},
+  {id:3, title:"Bingo Chips",        desc:"Bold crunchy masala chips, the classic snack attack",    price:5.00,was:12.00,img:"https://itcportal.com/content/dam/itc-corporate/images/itc-bingo.jpg",tag:"Snacks",    isNew:false,rating:4.5,reviews:5612},
+  {id:4, title:"Bingo Chips",      desc:"Everybody loves potato chips The Bingo brand has always been fun and a little quirky", price:10.00,was:129.00,img:"https://icarus.co.in/uploads/work/052.jpg",tag:"Snacks",   isNew:true, rating:4.8,reviews:1204},
+  {id:5, title:"Wafer Rolls",        desc:"Sweet crispy rolled wafers, light and delightful",       price:30.00,was:38.00,img:"https://5.imimg.com/data5/ANDROID/Default/2021/3/KT/XB/VR/7101315/product-jpeg-500x500.jpg",tag:"Sweets",    isNew:false,rating:4.3,reviews:743},
+  {id:6, title:"Dairy Milk",          desc:"Indulge in the irresistible taste of Dairy Milk Chocolate, now available, creamy milk chocolate,",   price:20.01,was:25.00,img:"https://wallpapercave.com/wp/wp2355260.jpg",tag:"Chocolates",isNew:true, rating:4.6,reviews:329},
+  {id:7, title:"Sip Up ",      desc:"500ml BPA-free daily sipper, hydration made easy",      price:5.00, was:8.00, img:"https://m.media-amazon.com/images/I/51bdX0Qdf+L.jpg",tag:"Drinkware", isNew:false,rating:4.1,reviews:2108},
+  {id:8, title:"Frooti Mango",       desc:"Fresh n Juicy mango drink, 125ml pack",                 price:15.09,was:18.00,img:"https://nagabazaar.com/cdn/shop/files/Frooti-Drink-Fresh-N-Juicy-Mango-125-ml0.webp?v=1747520726&width=1024",tag:"Drinks",    isNew:false,rating:4.4,reviews:4521},
+  {id:9, title:"Lays ",       desc:"Golden original salted potato chips, timeless taste",   price:5.05,was:12.00,img:"https://www.vridhistores.com/uploads/2023/May/images/16853580422982.jpg",tag:"Snacks",    isNew:false,rating:4.6,reviews:8932},
+  {id:10,title:"Nabati",         desc:"Nabati packs are available. In India, a Nabati wafer can be purchased for Rs. 10.  ",      price:10.00,was:65.00,img:"https://cdn0.desidime.com/topics/photos/1843369/original/Screenshot2024-09-02111301.png?1725255807",tag:"Sweets",     isNew:true, rating:4.7,reviews:3201},
+  {id:11,title:"Dark Fantasy",   desc:"Dark Fantasy Choco Fills, 69g, Original Filled Cookies with Choco Creme",price:35.00,was:89.00,img:"https://m.media-amazon.com/images/I/51xQUoNNRmL.jpg",tag:"Sweets",     isNew:true, rating:4.8,reviews:6742},
+  {id:12,title:"Fantastik",        desc:"Candyman Fantastik Choco Bar XL Chocolate Home Pack - Rich, Smooth, Creamy, 136 g Pouch",      price:10.00,was:19.00,img:"https://epeedikaonline.com/assets/products/original/products_qov94h.jpg",tag:"Sweets", isNew:false,rating:4.5,reviews:1567},
+  {id:13,title:"Lolipop",     desc:"Alpenliebe Pop Assorted Lollipop (Orange Strawberry & Caramel Flavour).",      price:10.00,was:30.00,img:"https://www.silkrute.com/images/detailed/4189/71dRLgROiLL.jpg",tag:"Sweets",      isNew:false,rating:4.6,reviews:892},
+  {id:14,title:"Leman Soda",       desc:"Soda drinks are defined as beverages that typically contain carbonated water, sweeteners, and natural or artificial",     price:10.00,was:16.00,img:"https://image.cdn.shpy.in/318897/SKU-0311_0-1722362648307.jpg?format=webp",tag:"Drinks",isNew:false,rating:4.4,reviews:432},
+  {id:15,title:"Umbrella Joy",    desc:"The company is in an ideal position to source and supply a wide range of products from India. .",       price:10.00,was:25.00,img:"https://5.imimg.com/data5/ANDROID/Default/2025/8/538106814/LH/OH/DF/215227467/product-jpeg-500x500.jpg",tag:"Sweet",      isNew:true, rating:4.7,reviews:1832},
+  {id:16,title:"Choco Bar",     desc:"70% single-origin dark chocolate with sea salt",        price:10.00, was:12.00,img:"https://b.zmtcdn.com/data/dish_photos/261/23a34de38c51d4b64029c2de48c73261.jpeg",tag:"Chocolates",isNew:false,rating:4.5,reviews:2190},
+  {id:17,title:"Choki Choki",    desc:"Choki Choki Chocolate Paste Launches Betiko Finger Puppets – Exciting New Consumer Promotion for Kids",     price:5.00,was:15.00,img:"https://staticprintenglish.theprint.in/wp-content/uploads/2024/08/ANI-20240826065801.jpg",tag:"Sweets",     isNew:false,rating:4.3,reviews:678},
+  {id:18,title:"Alpenliebe Eclairs",    desc:"Discover the delightful taste of Alpenliebe Eclairs Plus Caramel Toffee, a perfect treat for those who enjoy a rich, creamy caramel experience.",       price:5.00,was:42.00,img:"https://rukminim2.flixcart.com/image/480/640/xif0q/candy-mouth-freshener/j/h/c/-original-imagpzq5uk4jm7px.jpeg?q=90",tag:"Sweets", isNew:true, rating:4.8,reviews:4312},
+  {id:19,title:"Tenila",         desc:"Thane mittai, with its bright orange colour and sticky, sugary taste, has always lured us as childre.",          price:5.00,was:60.00,img:"https://i.ytimg.com/vi/mQ82HHyzMPg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCAmtZBzz7-2uS7pAajVmvdQFBtPQ",tag:"Sweet",isNew:false,rating:4.4,reviews:1023},
+  {id:20,title:"7up glass bottle",     desc:"Order 7UP Carbonated Soft Drink Glass Bottle 250 ml online for the best price and have it delivered throughout Qatar. ",      price:10.00,was:28.00,img:"https://ar.getit.qa/cdn/shop/files/1200Wx1200H-null_16.jpg?v=1704281909",tag:"Drinks",      isNew:false,rating:4.5,reviews:2874},
+];
+const ICONS={All:"🏷",Home:"🏠",Drinks:"🥤",Snacks:"🍟",Watches:"⌚",Sweets:"🍬",Chocolates:"🍫",Drinkware:"☕",Audio:"🎧",Stationery:"📓",Bags:"👜",Accessories:"🕶"};
+const categories=['All',...new Set(PRODUCTS.map(p=>p.tag))];
+
+/* =====================================================
+   STATE
+===================================================== */
+let mode = 'rk'; // 'rk' | 'az'
+let cart = JSON.parse(localStorage.getItem('rvbaz_cart')||'[]');
+let liked = JSON.parse(localStorage.getItem('rvbaz_liked')||'[]');
+let activeFilter='All', searchQ='', modalProd=null, mQty=1;
+let viewMode='grid', sortMode='default';
+let cardObs=null;
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toFixed(2);
+const starsHtml=r=>{const full=Math.floor(r),half=r-full>=.5?1:0;let s='';for(let i=0;i<full;i++)s+='★';if(half)s+='½';for(let i=s.replace('½','').length+(half);i<5;i++)s+='☆';return s};
+const discPct=(p,w)=>Math.round((1-p/w)*100);
+
+/* =====================================================
+   CURSOR
+===================================================== */
+const cur=$('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
+document.addEventListener('mousedown',()=>cur.classList.add('big'));
+document.addEventListener('mouseup',()=>cur.classList.remove('big'));
+
+/* =====================================================
+   MODE TOGGLE
+===================================================== */
+function setMode(m){
+  mode=m;
+  document.body.className='mode-'+m;
+  if(m==='az'){
+    $('rkCount').style.display='none';
+    $('azCount').style.display='';
+    $('secTitle').style.webkitTextFillColor='';
+    $('secTitle').style.background='none';
+    $('secTitle').style.color='var(--az-text)';
+  } else {
+    $('rkCount').style.display='';
+    $('azCount').style.display='none';
+    $('secTitle').style.color='';
+    $('secTitle').className='grd';
+  }
+  renderCats(); renderProducts(); renderCart();
+  const hasCart=cart.length>0;
+  if(m==='az'&&hasCart){$('azCart').classList.add('open');}
+  else if(m==='rk'&&hasCart){$('rkCart').classList.add('open');}
+  toast(m==='az'?'Amazon Mode activated 📦':'Dark Mode activated 🌶️', m==='az'?'📦':'🌶️');
+}
+$('modeBtn').onclick=()=>setMode('az');
+$('modeBtnAz').onclick=()=>setMode('rk');
+
+/* =====================================================
+   AMAZON DEAL STRIP
+===================================================== */
+function renderDealStrip(){
+  const strip=$('azDealStrip'); if(!strip) return;
+  strip.innerHTML='';
+  const deals=PRODUCTS.filter(p=>p.was&&discPct(p.price,p.was)>=20).slice(0,4);
+  deals.forEach(p=>{
+    const d=document.createElement('div');d.className='az-deal-card';
+    d.innerHTML=`<div class="dc-title">${p.title}</div><div class="dc-sub">Up to ${discPct(p.price,p.was)}% off</div><div class="dc-img"><img src="${p.img}" alt="" loading="lazy"/></div>`;
+    d.onclick=()=>openModal(p.id);
+    strip.appendChild(d);
+  });
+}
+renderDealStrip();
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+function renderCats(){
+  if(mode==='rk'){
+    const c=$('rkCats');c.innerHTML='';
+    categories.forEach(cat=>{
+      const b=document.createElement('button');b.className='rk-chip'+(cat===activeFilter?' active':'');
+      b.innerHTML=`<span>${ICONS[cat]||'•'}</span>${cat}`;
+      b.onclick=()=>{activeFilter=cat;renderCats();renderProducts()};
+      c.appendChild(b);
+    });
+  } else {
+    const c=$('azCats');c.innerHTML='';
+    categories.forEach(cat=>{
+      const b=document.createElement('button');b.className='az-cat-btn'+(cat===activeFilter?' active':'');
+      b.innerHTML=`${ICONS[cat]||''} ${cat}`;
+      b.onclick=()=>{activeFilter=cat;renderCats();renderProducts()};
+      c.appendChild(b);
+    });
+  }
+}
+
+/* =====================================================
+   SORT
+===================================================== */
+function getSorted(list){
+  if(sortMode==='price-asc') return [...list].sort((a,b)=>a.price-b.price);
+  if(sortMode==='price-desc') return [...list].sort((a,b)=>b.price-a.price);
+  if(sortMode==='rating') return [...list].sort((a,b)=>b.rating-a.rating);
+  return list;
+}
+$('azSort').onchange=e=>{sortMode=e.target.value;renderProducts()};
+$('gridViewBtn').onclick=()=>{viewMode='grid';$('gridViewBtn').classList.add('active');$('listViewBtn').classList.remove('active');renderProducts()};
+$('listViewBtn').onclick=()=>{viewMode='list';$('listViewBtn').classList.add('active');$('gridViewBtn').classList.remove('active');renderProducts()};
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+function getFiltered(){
+  let l=PRODUCTS;
+  if(activeFilter!=='All')l=l.filter(p=>p.tag===activeFilter);
+  const q=searchQ;
+  if(q)l=l.filter(p=>(p.title+p.desc+p.tag).toLowerCase().includes(q));
+  return getSorted(l);
+}
+function renderProducts(){
+  const grid=$('prodGrid');
+  const list=getFiltered();
+  const n=list.length;
+  $('rkCount').textContent=n+' item'+(n!==1?'s':'');
+  $('azCount').textContent='1-'+n+' of '+n+' results for "'+((activeFilter==='All'&&!searchQ)?'All Products':activeFilter||searchQ)+'"';
+  grid.innerHTML='';
+  if(mode==='az'){
+    grid.classList.toggle('list-view',viewMode==='list');
+  } else {
+    grid.classList.remove('list-view');
+  }
+  if(!n){
+    grid.innerHTML=`<div class="empty-state"><span class="emo">${mode==='az'?'🔍':'🔍'}</span><p>${mode==='az'?'No results for "'+( searchQ||activeFilter)+'"':'No results found for — "'+( searchQ||activeFilter)+'"'}</p></div>`;
+    return;
+  }
+  list.forEach((p,i)=>{
+    const isLiked=liked.includes(p.id);
+    const disc=p.was?discPct(p.price,p.was):0;
+    const c=document.createElement('div');c.className='card';c.dataset.id=p.id;
+    const starsStr='★'.repeat(Math.floor(p.rating))+(p.rating%1>=.5?'½':'')+'☆'.repeat(5-Math.ceil(p.rating));
+    c.innerHTML=`
+      <div class="card-img">
+        <img src="${p.img}" alt="${p.title}" loading="lazy"/>
+        <div class="rk-tag">${ICONS[p.tag]||''} ${p.tag}</div>
+        ${p.isNew?'<div class="rk-new">NEW</div>':''}
+        <button class="rk-like${isLiked?' liked':''}" data-fav="${p.id}">${isLiked?'❤️':'🤍'}</button>
+        <div class="az-badge-wrap">
+          ${disc>0?`<div class="az-discount-badge">${disc}% off</div>`:''}
+          ${p.isNew?'<div class="az-prime-badge">✦ Prime</div>':''}
+
+        </div>
+        <button class="az-wishlist${isLiked?' liked':''}" data-fav="${p.id}" style="${isLiked?'opacity:1;transform:scale(1)':''}">${isLiked?'❤️':'🤍'}</button>
+      </div>
+      <div class="card-body">
+        <div class="card-cat-lbl">${p.tag}</div>
+        <div class="card-title">${p.title}</div>
+        <div class="stars-row"><span class="stars" style="color:#FF9900;font-size:13px">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span><span class="star-count">${p.reviews.toLocaleString()}</span></div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="az-instock">✓ In Stock — ships from RV Bazar</div>
+        <div class="price-row">
+          <div class="rk-price">$${fmt(p.price)}</div>
+          <div class="az-price-wrap">
+            ${disc>0?`<div class="az-price-was">M.R.P.: $${fmt(p.was)}</div>`:''}
+            <div class="az-price-main"><sup>$</sup>${fmt(p.price)}</div>
+            ${disc>0?`<div class="az-price-save">You save $${fmt(p.was-p.price)} (${disc}%)</div>`:''}
+          </div>
+        </div>
+        <div class="az-delivery">FREE delivery by Tomorrow</div>
+        <div class="card-actions">
+          <button class="cbtn-add" data-add="${p.id}">Add to Cart</button>
+          <button class="cbtn-view" data-view="${p.id}">View</button>
+        </div>
+      </div>`;
+    c.style.transitionDelay=Math.min(i*40,400)+'ms';
+    grid.appendChild(c);
+  });
+  attachObs();
+}
+
+/* Observer */
+function attachObs(){
+  if(cardObs)cardObs.disconnect();
+  cardObs=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');cardObs.unobserve(en.target)}})},{threshold:.08});
+  document.querySelectorAll('.card').forEach(c=>cardObs.observe(c));
+}
+
+/* Event delegation on grid */
+$('prodGrid').addEventListener('click',e=>{
+  const add=e.target.closest('[data-add]');
+  const view=e.target.closest('[data-view]');
+  const fav=e.target.closest('[data-fav]');
+  const img=e.target.closest('.card-img');
+  if(add){addToCart(+add.dataset.add);return}
+  if(view){openModal(+view.dataset.view);return}
+  if(fav){toggleLike(+fav.dataset.fav);return}
+  if(img)openModal(+img.closest('.card').dataset.id);
+});
+
+/* =====================================================
+   LIKES
+===================================================== */
+function toggleLike(id){
+  if(liked.includes(id)){
+    liked=liked.filter(x=>x!==id);
+    toast(mode==='az'?'Removed from Wish List':'Removed from Wish List','🤍');
+  } else {
+    liked.push(id);
+    toast(mode==='az'?'Added to Wish List ♡':'Added to Wish List ♡','❤️');
+  }
+  localStorage.setItem('rvbaz_liked',JSON.stringify(liked));
+  renderProducts();
+}
+
+/* =====================================================
+   CART
+===================================================== */
+function saveCart(){localStorage.setItem('rvbaz_cart',JSON.stringify(cart));renderCart();updateBadges()}
+function addToCart(id,qty=1){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
+  const it=cart.find(x=>x.id===id);
+  if(it)it.qty+=qty;else cart.push({id:p.id,title:p.title,tag:p.tag,price:p.price,was:p.was,img:p.img,qty});
+  saveCart();
+  toast(mode==='az'?`Added to Cart: ${p.title}`:`${p.title} — added to cart!`, mode==='az'?'🛒':'✦');
+  if(window.innerWidth<1060){
+    if(mode==='az')$('azCart').classList.add('open');
+    else $('rkCart').classList.add('open');
+  }
+}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);saveCart()}
+function changeQty(id,d){const it=cart.find(x=>x.id===id);if(!it)return;it.qty=Math.max(1,it.qty+d);saveCart()}
+function clearCart(){if(!cart.length)return;if(!confirm(mode==='az'?'Remove all items from cart?':'Remove all items from your cart?'))return;cart=[];saveCart();toast(mode==='az'?'Cart cleared':'Cart cleared','🗑️')}
+function updateBadges(){
+  const n=cart.reduce((s,x)=>s+x.qty,0);
+  const rb=$('rkCartBadge');
+  rb.textContent=n;if(n>0)rb.classList.add('show');else rb.classList.remove('show');
+  const ac=$('azCartCount');
+  ac.textContent=n;ac.style.opacity=n>0?'1':'0';
+}
+function renderCart(){
+  const total=cart.reduce((s,x)=>s+x.qty*x.price,0);
+  const n=cart.reduce((s,x)=>s+x.qty,0);
+  // both carts use same items
+  ['rk','az'].forEach(m=>{
+    const itemsEl=$(m+'CartItems');
+    const emptyEl=$(m+'Empty');
+    const footEl=$(m+'CartFoot');
+    const countEl=$(m==='rk'?'rkItemsCount':'azItemsCount');
+    itemsEl.innerHTML='';
+    countEl.textContent=n+' item'+(n!==1?'s':'');
+    if(!cart.length){emptyEl.style.display='';footEl.style.display='none';return}
+    emptyEl.style.display='none';footEl.style.display='';
+    cart.forEach(it=>{
+      const d=document.createElement('div');d.className='cart-item-row';
+      d.innerHTML=`<div class="ci-thumb"><img src="${it.img}" alt="${it.title}"/></div><div class="ci-info"><div class="ci-name">${it.title}</div><div class="ci-tag-lbl">${it.tag}</div><div class="ci-qty-row"><button class="qb" onclick="changeQty(${it.id},-1)">−</button><span class="qn">${it.qty}</span><button class="qb" onclick="changeQty(${it.id},1)">+</button></div></div><div class="ci-right"><div class="ci-price">$${fmt(it.qty*it.price)}</div><button class="ci-remove" onclick="removeItem(${it.id})">${m==='az'?'Delete':'Remove'}</button></div>`;
+      itemsEl.appendChild(d);
+    });
+    $(m==='rk'?'rkSubtotal':'azSubtotal').textContent='$'+fmt(total);
+    $(m==='rk'?'rkTotal':'azTotal').textContent='$'+fmt(total);
+  });
+}
+
+/* Checkout */
+function doCheckout(){
+  if(!cart.length){toast(mode==='az'?'Your cart is empty':'Your cart is empty!','⚠️');return}
+  const total=cart.reduce((s,x)=>s+x.qty*x.price,0);
+  const oid=Date.now();
+  const orders=JSON.parse(localStorage.getItem('rvbaz_orders')||'[]');
+  orders.push({id:oid,items:[...cart],total,date:new Date().toISOString()});
+  localStorage.setItem('rvbaz_orders',JSON.stringify(orders));
+  cart=[];saveCart();
+  toast(mode==='az'?'Order placed! Your items will arrive soon 📦':'Order placed! 🎉','✅');
+  setTimeout(()=>alert((mode==='az'?'✅ Order Placed!\n\nOrder ID: #':'✅ Order Placed!\n\nOrder ID: #')+oid+'\nTotal: $'+fmt(total)+'\n\n'+(mode==='az'?'Thank you for shopping at RV Bazar!':'Thank you for shopping at RV Bazar!')),200);
+}
+
+/* Cart toggles */
+$('rkCartBtn').onclick=()=>$('rkCart').classList.toggle('open');
+$('azCartBtn').onclick=()=>$('azCart').classList.toggle('open');
+
+/* =====================================================
+   SEARCH
+===================================================== */
+$('rkSearch').addEventListener('input',e=>{searchQ=e.target.value.trim().toLowerCase();renderProducts()});
+$('azSearch').addEventListener('input',e=>{searchQ=e.target.value.trim().toLowerCase();renderProducts()});
+$('azSearch').addEventListener('keydown',e=>{if(e.key==='Enter')renderProducts()});
+
+/* =====================================================
+   MODAL
+===================================================== */
+function openModal(id){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
+  modalProd=p;mQty=1;
+  $('mImg').src=p.img;
+  $('mTagPill').textContent=p.tag;
+  $('mTitle').textContent=p.title;
+  $('mDesc').textContent=p.desc;
+  $('mStars').innerHTML=`<span class="stars" style="color:#FF9900;font-size:14px">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span><span style="font-size:12px;color:#007185;text-decoration:underline;cursor:pointer">${p.reviews.toLocaleString()} ratings</span>`;
+  $('mPrice').innerHTML=mode==='az'
+    ?`<span style="font-size:12px;color:#565959">M.R.P.: </span><span style="text-decoration:line-through;color:#565959;font-size:14px">$${fmt(p.was)}</span> <span style="color:#B12704;font-size:24px;font-weight:900">$${fmt(p.price)}</span> <span style="color:#007600;font-size:12px;font-weight:700"> (${discPct(p.price,p.was)}% off)</span>`
+    :'$'+fmt(p.price);
+  $('mqVal').textContent=1;
+  $('modalOverlay').classList.add('open');
+}
+function closeModal(){$('modalOverlay').classList.remove('open')}
+$('modalOverlay').onclick=e=>{if(e.target===$('modalOverlay'))closeModal()};
+$('mqMinus').onclick=()=>{if(mQty>1){mQty--;$('mqVal').textContent=mQty}};
+$('mqPlus').onclick=()=>{mQty++;$('mqVal').textContent=mQty};
+$('mAddBtn').onclick=()=>{if(modalProd){addToCart(modalProd.id,mQty);closeModal()}};
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+/* =====================================================
+   TOAST
+===================================================== */
+function toast(msg,icon='✦'){
+  const el=document.createElement('div');el.className='toast';
+  el.innerHTML=`<span class="toast-icon">${icon}</span>${msg}<div class="toast-bar"></div>`;
+  $('toaster').appendChild(el);
+  setTimeout(()=>{el.classList.add('toast-fade');setTimeout(()=>el.remove(),280)},2200);
+}
+
+/* =====================================================
+   RIPPLE
+===================================================== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.rk-btn-fire,.rk-btn-outline,.cbtn-add,.cbtn-view,.modal-add-btn,.rk-checkout-btn,.az-proceed-btn,.az-hero-cta');
+  if(!b)return;
+  const r=document.createElement('span');r.className='ripple';
+  const rect=b.getBoundingClientRect(),size=Math.max(rect.width,rect.height)*2;
+  r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  b.appendChild(r);setTimeout(()=>r.remove(),600);
+});
+
+/* =====================================================
+   INIT
+===================================================== */
+renderCats();
+renderProducts();
+renderCart();
+updateBadges();
+</script>
+</body>
+</html>
